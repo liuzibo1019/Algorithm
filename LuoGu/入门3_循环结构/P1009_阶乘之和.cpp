@@ -1,12 +1,5 @@
-#include <iostream>
-#include <string>
-#include <cstring>
-#include <cstdio>
-#include <ctime>
+#include <bits/stdc++.h>
 using namespace std;
-
-#define ull unsigned long long
-#define ll long long
 
 const int maxn = 1000;
 
@@ -176,148 +169,19 @@ ostream &operator<<(ostream &out, const bign &x)
     return out;
 }
 
-// 欧几里得算法
-bign gcd(bign a, bign b);
-// 扩展欧几里得
-ll exGcd(ll a, ll b, ll &x, ll &y);
-// bign转ll
-ll bign2ll(bign a);
-// 求解ax = 1(mod n)
-bign mod_reverse(bign a, bign n);
-// 中国剩余定理
-bign ChineseRemainder(bign a[], bign mod[]);
-// 牛顿法开三次方
-bign sqrt3(bign x);
-
 int main()
 {
-    bign e, m;
-    cout << "===========小指数加密攻击===========" << endl;
-    e = 3;
-    bign ni[3];
-    bign ci[3];
-
-    cout << "e = 3" << endl;
-    // 读入n1, n2, n3并检查是否互素
-    while (true)
+    int n;
+    cin >> n;
+    bign S = 0;
+    for (int i = 1; i <= n; i++)
     {
-        cout << "n1 = ";
-        cin >> ni[0];
-        cout << "n2 = ";
-        cin >> ni[1];
-        cout << "n3 = ";
-        cin >> ni[2];
-        if (gcd(ni[0], ni[1]) == 1 && gcd(ni[1], ni[2]) == 1 && gcd(ni[0], ni[2]) == 1)
-        {
-            break;
+        bign mul = 1;
+        for (int j = 1; j <= i; j++){
+            mul = mul * j;
         }
-        else
-        {
-            cout << "n1, n2, n3不互素, 请重新输入!" << endl;
-        }
+        S = S + mul;
     }
-    // 读入c1, c2, c3
-    cout << "c1 = ";
-    cin >> ci[0];
-    cout << "c2 = ";
-    cin >> ci[1];
-    cout << "c3 = ";
-    cin >> ci[2];
-    cout << endl;
-    // 通过中国剩余定理求解明文的三次方
-    m = ChineseRemainder(ci, ni);
-
-    // cout << m << endl;
-
-    // 通过牛顿法开三次方求出明文
-    cout << "明文m = " << sqrt3(m) << endl;
-    cout << endl;
-    system("pause");
+    cout << S << endl;
     return 0;
-}
-
-// 欧几里得算法
-bign gcd(bign a, bign b)
-{
-    bign temp;
-    while (b > 0)
-    {
-        temp = a % b;
-        a = b;
-        b = temp;
-    }
-    return a;
-}
-
-// 扩展欧几里得
-ll exGcd(ll a, ll b, ll &x, ll &y)
-{
-    if (b == 0)
-    {
-        x = 1;
-        y = 0;
-        return a;
-    }
-    ll r = exGcd(b, a % b, x, y);
-    ll temp = x;
-    x = y;
-    y = temp - a / b * y;
-    return r;
-}
-
-// bign转ll
-ll bign2ll(bign a)
-{
-    ll res = 0;
-    for (int i = a.len - 1; i >= 0; i--)
-    {
-        res = res * 10 + a.d[i];
-    }
-    return res;
-}
-// 求解ax = 1(mod n)
-bign mod_reverse(bign a, bign n)
-{
-    ll d, x, y;
-    d = exGcd(bign2ll(a), bign2ll(n), x, y);
-    ll lln = bign2ll(n);
-    bign res;
-    res = (x % lln + lln) % lln;
-    if (d = 1)
-    {
-        return res;
-    }
-    else
-        return -1;
-}
-
-// 中国剩余定理
-bign ChineseRemainder(bign a[], bign mod[])
-{
-    bign k = mod[0];
-    bign b = 0;
-    bign z = 0;
-    for (int i = 1; i < 3; i++)
-    {
-        k = k * mod[i];
-    }
-    for (int i = 0; i < 3; i++)
-    {
-        z = mod_reverse((k / mod[i]), mod[i]);
-        b = b + (a[i] * (k / mod[i]) * z);
-    }
-    return b % k;
-}
-
-// 牛顿法开三次方
-bign sqrt3(bign x)
-{
-    bign x1 = x;
-    bign x2 = x / 2;
-    while (x1 - x2 > 0)
-    {
-        x1 = x2;
-        x2 = (x1 * 2 + x / (x1 * x1)) / 3;
-    }
-    return x2;
 }
