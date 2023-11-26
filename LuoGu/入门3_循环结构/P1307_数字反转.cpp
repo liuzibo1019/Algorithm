@@ -3,7 +3,7 @@ using namespace std;
 
 int main()
 {
-    string a = "asdf";
-    cout << a.size() << endl;
+    
+    while()
     return 0;
 }
